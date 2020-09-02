@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <math.h>
 #include <time.h>
 
 int player(int, int);
+int dealer(int, int);
 void choice(char, int, int);
-int score(int, int, int);
+int playerScore(int, int/*, int*/);
+//int dealerScore(
 
 int main(void)
 {
@@ -13,7 +14,7 @@ int main(void)
     time_t t;
     srand((unsigned)time(&t));
 
-    /*Write code to clear terminal when the game starts*/
+    system("clear");/*Write code to clear terminal when the game starts*/
     printf("Welcome to the Blackjack table.\n");
     printf("How much would you like to deposit?\n$");
     scanf("%d", &funds);
@@ -31,6 +32,85 @@ int main(void)
     return 0;
 }
 
+int player(int bet, int funds) {
+    int playerTotal;
+    int playerDraw1;
+    int playerDraw2;
+    int dealerTotal = 0;
+//    char answer = ' ';
+    while (bet > funds) {
+        printf("Insufficient funds, please enter another amount:\n$");
+        scanf("%d", &bet);
+    }
+    printf("Here are your cards, good luck.\n");
+    playerDraw1 = rand() % 13 + 1;
+    playerDraw2 = rand() % 13 + 1;
+
+    // If both cards are a JQK or A then the system breaks
+    if (playerDraw1 == 11) {
+        playerTotal = playerDraw1 - 1 + playerDraw2;
+        printf("J %d\n", playerDraw2);
+        printf("Player total: %d\n", playerTotal);
+    }
+    else if (playerDraw2 == 11) {
+        playerTotal = playerDraw2 - 1 + playerDraw1;
+        printf("%d J\n", playerDraw1);
+        printf("Player total: %d\n", playerTotal);
+    }
+    else if (playerDraw1 == 12) {
+        playerTotal = playerDraw1 - 2 + playerDraw2;
+        printf("Q %d\n", playerDraw2);
+        printf("Player total: %d\n", playerTotal);
+    }
+    else if (playerDraw2 == 12) {
+        playerTotal = playerDraw2 - 2 + playerDraw1;
+        printf("%d Q\n", playerDraw1);
+        printf("Player total: %d\n", playerTotal);
+    }
+    else if (playerDraw1 == 13) {
+        playerTotal = playerDraw1 - 3 + playerDraw2;
+        printf("K %d\n", playerDraw2);
+        printf("Player total: %d\n", playerTotal);
+    }
+    else if (playerDraw2 == 13) {
+        playerTotal = playerDraw2 - 3 + playerDraw1;
+        printf("%d K\n", playerDraw1);
+        printf("Player total: %d\n", playerTotal);
+    }
+    else if (playerDraw1 == 1) {
+        if (playerDraw1 + playerDraw2 <= 10) {
+            playerDraw1 = 11;
+            playerTotal = playerDraw1 + playerDraw2;
+            printf("A %d\n", playerDraw2);
+            printf("Player total: %d\n", playerTotal);
+        } else {
+            playerDraw2 = 1;
+            playerTotal = playerDraw1 + playerDraw2;
+            printf("A %d\n", playerDraw2);
+            printf("Player total: %d\n", playerTotal);
+        }
+    }
+    else if (playerDraw2 == 1) {
+        if (playerDraw1 + playerDraw2 <= 10) {
+            playerDraw2 = 11;
+            playerTotal = playerDraw1 + playerDraw2;
+            printf("%d A\n", playerDraw1);
+            printf("Player total: %d\n", playerTotal);
+        } else {
+            playerDraw2 = 1;
+            playerTotal = playerDraw1 + playerDraw2;
+            printf("%d A\n", playerDraw1);
+            printf("Player total: %d\n", playerTotal);
+        }
+    }
+    else {
+        printf("%d %d\n", playerDraw1, playerDraw2);
+        playerTotal = playerDraw1 + playerDraw2;
+        printf("Player total: %d\n", playerTotal);
+    }
+    dealer(playerTotal, dealerTotal);
+}
+
 void choice(char answer, int playerTotal, int funds) {
     int pTotal = playerTotal;
     int newPlayerCard;
@@ -44,7 +124,7 @@ void choice(char answer, int playerTotal, int funds) {
             if (newPlayerCard == 11) {
                 printf("J\n");
                 newPlayerCard = 10;
-                score(playerTotal, dealerTotal, funds);
+                pScore(playerTotal, /*dealerTotal,*/ funds);
                 //Call needed to function saying < or > 21. Repeat for Q, K, etc
             }
             else if (newPlayerCard == 12) {
@@ -95,95 +175,10 @@ void choice(char answer, int playerTotal, int funds) {
     }
 }
 
-int player(int bet, int funds) {
-    int playerTotal;
-    int playerDraw1;
-    int playerDraw2;
-//    char answer = ' ';
-
-    while (bet > funds) {
-        printf("Insufficient funds, please enter another amount:\n$");
-        scanf("%d", &bet);
-    }
-    printf("Here are your cards, good luck.\n");
-    playerDraw1 = rand() % 13 + 1;
-    playerDraw2 = rand() % 13 + 1;
-
-    // If both cards are a JQK or A then the system breaks
-    if (playerDraw1 == 11) {
-        playerTotal = 10 + playerDraw2;
-        // playerDraw1 = 10;
-        printf("J %d\n", playerDraw2);
-        printf("Player total: %d\n", playerTotal);
-    }
-    else if (playerDraw2 == 11) {
-        playerTotal = 10 + playerDraw1;
-        //playerDraw2 = 10;
-        printf("%d J\n", playerDraw1);
-        printf("Player total: %d\n", playerTotal);
-    }
-    else if (playerDraw1 == 12) {
-        playerTotal = 10 + playerDraw1;
-        //playerDraw1 = 10;
-        printf("Q %d\n", playerDraw2);
-        printf("Player total: %d\n", playerTotal);
-    }
-    else if (playerDraw2 == 12) {
-        playerTotal = 10 + playerDraw2;
-        //playerDraw2 = 10;
-        printf("%d Q\n", playerDraw1);
-        printf("Player total: %d\n", playerTotal);
-    }
-    else if (playerDraw1 == 13) {
-        playerTotal = 10 + playerDraw1;
-        //playerDraw1 = 10;
-        printf("K %d\n", playerDraw2);
-        printf("Player total: %d\n", playerTotal);
-    }
-    else if (playerDraw2 == 13) {
-        playerTotal = 10 + playerDraw2;
-        //playerDraw2 = 10;
-        printf("%d K\n", playerDraw1);
-        printf("Player total: %d\n", playerTotal);
-    }
-    else if (playerDraw1 == 1) {
-        if (playerDraw1 + playerDraw2 <= 10) {
-            playerDraw1 = 11;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("A %d\n", playerDraw2);
-            printf("Player total: %d\n", playerTotal);
-        } else {
-            playerDraw2 = 1;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("A %d\n", playerDraw2);
-            printf("Player total: %d\n", playerTotal);
-        }
-    }
-    else if (playerDraw2 == 1) {
-        if (playerDraw1 + playerDraw2 <= 10) {
-            playerDraw2 = 11;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("%d A\n", playerDraw1);
-            printf("Player total: %d\n", playerTotal);
-        } else {
-            playerDraw2 = 1;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("%d A\n", playerDraw1);
-            printf("Player total: %d\n", playerTotal);
-        }
-    }
-    else {
-        printf("%d %d\n", playerDraw1, playerDraw2);
-        playerTotal = playerDraw1 + playerDraw2;
-        printf("Player total: %d\n", playerTotal);
-    }
-}
-
-int dealer(int bet, int funds) { //*** bet and funds shouldn't be in this function, replace them with something else like dealerTotal, etc***
-    int dealerTotal;
+int dealer(int playerTotal, int dealerTotal) { //*** bet and funds shouldn't be in this function, replace them with something else like dealerTotal, etc***
+    int dTotal = dealerTotal;
     int dealerDraw1;
-    int dealerDraw2;
-//    char answer = ' ';
+    int dealerDraw2 = 0;
 
 //    while (bet > funds) {
 //        printf("Insufficient funds, please enter another amount:\n$");
@@ -191,81 +186,82 @@ int dealer(int bet, int funds) { //*** bet and funds shouldn't be in this functi
 //    }
     printf("Here are your cards, good luck.\n");
     dealerDraw1 = rand() % 13 + 1;
-    dealerDraw2 = rand() % 13 + 1;
+//    choice(answer, );
+//    dealerDraw2 = rand() % 13 + 1;
 
     // If both cards are a JQK or A then the system breaks
     if (dealerDraw1 == 11) {
-        dealerTotal = 10 + dealerDraw2;
-        // playerDraw1 = 10;
+        dealerTotal = dealerDraw1 - 1 + dealerDraw2;
         printf("J %d\n", dealerDraw2);
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
     }
-    else if (dealerDraw2 == 11) {
-        dealerTotal = 10 + dealerDraw1;
-        //dealerDraw2 = 10;
-        printf("%d J\n", dealerDraw1);
-        printf("Player total: %d\n", dealerTotal);
-    }
+    //*** This won't be used until the dealer draws the second card ***
+//    else if (dealerDraw2 == 11) {
+//        dealerTotal = dealerDraw2 - 1 + dealerDraw1;
+//        printf("%d J\n", dealerDraw1);
+//        printf("Dealer total: %d\n", dealerTotal);
+//    }
     else if (dealerDraw1 == 12) {
-        dealerTotal = 10 + dealerDraw1;
-        //dealerDraw1 = 10;
+        dealerTotal = dealerDraw1 - 2 + dealerDraw2;
         printf("Q %d\n", dealerDraw2);
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
     }
-    else if (dealerDraw2 == 12) {
-        dealerTotal = 10 + dealerDraw2;
-        //dealerDraw2 = 10;
-        printf("%d Q\n", dealerDraw1);
-        printf("Player total: %d\n", dealerTotal);
-    }
+        //*** This won't be used until the dealer draws the second card ***
+//    else if (dealerDraw2 == 12) {
+//        dealerDraw2 = 10 + dealerDraw2;
+//        //dealerDraw2 = 10;
+//        printf("%d Q\n", dealerDraw1);
+//        printf("Dealer total: %d\n", dealerTotal);
+//    }
     else if (dealerDraw1 == 13) {
-        dealerTotal = 10 + dealerDraw1;
-        //dealerDraw1 = 10;
+        dealerTotal = dealerDraw1 - 3 + dealerDraw2;
         printf("K %d\n", dealerDraw2);
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
     }
-    else if (dealerDraw2 == 13) {
-        dealerTotal = 10 + dealerDraw2;
-        //dealerDraw2 = 10;
-        printf("%d K\n", dealerDraw1);
-        printf("Player total: %d\n", dealerTotal);
-    }
+        //*** This won't be used until the dealer draws the second card ***
+//    else if (dealerDraw2 == 13) {
+//        dealerDraw2 = 10 + dealerDraw2;
+//        //dealerDraw2 = 10;
+//        printf("%d K\n", dealerDraw1);
+//        printf("Dealer total: %d\n", dealerTotal);
+//    }
     else if (dealerDraw1 == 1) {
         if (dealerDraw1 + dealerDraw2 <= 10) {
             dealerDraw1 = 11;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("A %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         } else {
             dealerDraw2 = 1;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("A %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
-    else if (dealerDraw2 == 1) {
-        if (dealerDraw1 + dealerDraw2 <= 10) {
-            dealerDraw2 = 11;
-            dealerTotal = dealerDraw1 + dealerDraw2;
-            printf("%d A\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
-        } else {
-            dealerDraw2 = 1;
-            dealerTotal = dealerDraw1 + dealerDraw2;
-            printf("%d A\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
-        }
-    }
+        //*** This won't be used until the dealer draws the second card ***
+//    else if (dealerDraw2 == 1) {
+//        if (dealerDraw1 + dealerDraw2 <= 10) {
+//            dealerDraw2 = 11;
+//            dealerTotal = dealerDraw1 + dealerDraw2;
+//            printf("%d A\n", dealerDraw1);
+//            printf("Dealer total: %d\n", dealerTotal);
+//        } else {
+//            dealerDraw2 = 1;
+//            dealerTotal = dealerDraw1 + dealerDraw2;
+//            printf("%d A\n", dealerDraw1);
+//            printf("Dealer total: %d\n", dealerTotal);
+//        }
+//    }
     else {
-        printf("%d %d\n", dealerDraw1, dealerDraw2);
-        dealerTotal = dealerDraw1 + dealerDraw2;
-        printf("Player total: %d\n", dealerTotal);
+//        printf("%d %d\n", dealerDraw1, dealerDraw2);
+        printf("%d \n", dealerDraw1);
+        dealerTotal = dealerDraw1 /* + dealerDraw2*/;
+        printf("Dealer total: %d\n", dealerTotal);
     }
+    choice(answer, playerTotal, funds); //fix this up!
 }
 
-
-
-int score(int playerTotal, int dealerTotal, int funds)
+int pScore(int playerTotal, int dealerTotal, int funds)
 {
 //    int playerTotal;
     char answer = ' ';
