@@ -301,6 +301,6 @@ int dScore(int dealerTotal, int playerTotal, int bet, int funds)
     }
     else if (dealerTotal < 17)
     {
-        
+
     }
 }
