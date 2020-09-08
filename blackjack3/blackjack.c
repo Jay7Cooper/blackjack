@@ -2,15 +2,17 @@
 #include <stdlib.h>
 #include <time.h>
 
-int player(int, int);
-int dealer(int, int);
-void choice(char, int, int);
+int player(int, int, char);
+int dealer(int, int, char, int);
+void choice(char, int, int, int);
 int playerScore(int, int/*, int*/);
-//int dealerScore(
+int pScore(int, int, int);
+int dScore(int dealerTotal, int playerTotal, int bet, int funds);
 
 int main(void)
 {
-    int bet, funds/*, win, loss, record, winStreak, playerTotal, dealerTotal*/ = 0;    
+    int bet, funds/*, win, loss, record, winStreak, playerTotal, dealerTotal*/ = 0;
+    char answer = ' ';
     time_t t;
     srand((unsigned)time(&t));
 
@@ -22,7 +24,7 @@ int main(void)
     if (funds > 0) {
         printf("You have $%d available. How much would you like to bet?\n$", funds);
         scanf("%d", &bet);
-        player(bet, funds);
+        player(bet, funds, answer);
         /*Add code for dealer hands so it deals and then calculates who wins
         It will have to work in between player hands so you can decide whether to hit or stand, etc*/
     }
@@ -32,7 +34,7 @@ int main(void)
     return 0;
 }
 
-int player(int bet, int funds) {
+int player(int bet, int funds, char answer) {
     int playerTotal;
     int playerDraw1;
     int playerDraw2;
@@ -108,10 +110,10 @@ int player(int bet, int funds) {
         playerTotal = playerDraw1 + playerDraw2;
         printf("Player total: %d\n", playerTotal);
     }
-    dealer(playerTotal, dealerTotal);
+    dealer(playerTotal, dealerTotal, answer, funds);
 }
 
-void choice(char answer, int playerTotal, int funds) {
+void choice(char answer, int playerTotal, int bet, int funds) {
     int pTotal = playerTotal;
     int newPlayerCard;
     time_t t;
@@ -124,7 +126,7 @@ void choice(char answer, int playerTotal, int funds) {
             if (newPlayerCard == 11) {
                 printf("J\n");
                 newPlayerCard = 10;
-                pScore(playerTotal, /*dealerTotal,*/ funds);
+                pScore(playerTotal, /*dealerTotal,*/bet, funds);
                 //Call needed to function saying < or > 21. Repeat for Q, K, etc
             }
             else if (newPlayerCard == 12) {
@@ -138,10 +140,12 @@ void choice(char answer, int playerTotal, int funds) {
             else if (newPlayerCard == 1 && pTotal <= 10) {
                 printf("A\n");
                 newPlayerCard = 11;
+                //revert 11 to 1 if total > 21
             }
             else if (newPlayerCard == 1 && pTotal > 10) {
                 printf("A\n");
                 newPlayerCard = 1;
+                //revert 11 to 1 if total > 21
             }
 //                if (playerDraw1 + playerDraw2 <= 10) {
 //                    playerDraw2 = 11;
@@ -169,13 +173,13 @@ void choice(char answer, int playerTotal, int funds) {
             // Add code to go to dealers draw function
             break;
 
-        default:
-            printf("Pay attention. Would you like to (H)it, (S)tand, S(P)lit, or (D)ouble Down?\n");
-            break;
+//        default:
+//            printf("Pay attention. Would you like to (H)it, (S)tand, S(P)lit, or (D)ouble Down?\n");
+//            break;
     }
 }
 
-int dealer(int playerTotal, int dealerTotal) { //*** bet and funds shouldn't be in this function, replace them with something else like dealerTotal, etc***
+int dealer(int playerTotal, int dealerTotal, char answer, int funds) {
     int dTotal = dealerTotal;
     int dealerDraw1;
     int dealerDraw2 = 0;
@@ -184,7 +188,7 @@ int dealer(int playerTotal, int dealerTotal) { //*** bet and funds shouldn't be 
 //        printf("Insufficient funds, please enter another amount:\n$");
 //        scanf("%d", &bet);
 //    }
-    printf("Here are your cards, good luck.\n");
+    printf("\nDealers cards are:\n");
     dealerDraw1 = rand() % 13 + 1;
 //    choice(answer, );
 //    dealerDraw2 = rand() % 13 + 1;
@@ -258,25 +262,27 @@ int dealer(int playerTotal, int dealerTotal) { //*** bet and funds shouldn't be 
         dealerTotal = dealerDraw1 /* + dealerDraw2*/;
         printf("Dealer total: %d\n", dealerTotal);
     }
-    choice(answer, playerTotal, funds); //fix this up!
+    choice(answer, playerTotal, dealerTotal, funds);
 }
 
-int pScore(int playerTotal, int dealerTotal, int funds)
+int pScore(int playerTotal, /*int dealerTotal,*/int bet, int funds)
 {
-//    int playerTotal;
     char answer = ' ';
-//    int funds;
 
     //Put this in a separate function to make it repeat if under 21
     if (playerTotal > 21) {
         printf("%d\n", playerTotal);
         printf("You've busted. Thank you for playing\n");
+        funds = funds - bet;
     } else if (playerTotal == 21) {
         printf("Congratulations!\n");
+        //insert code for comparing to dealer hand
+        //insert code for calculating win loss amount
+        //Don't forget win amount for blackjack hand
     } else {
         printf("Would you like to (H)it, (S)tand, S(P)lit, or (D)ouble Down?\n");
         scanf(" %c", &answer);
-        choice(answer, playerTotal, funds);
+        choice(answer, playerTotal, bet, funds);
     }
     if (funds == 0) {
         printf("You are out of funds.\nSecurity will now escort you out of the casino.\n");
@@ -284,4 +290,17 @@ int pScore(int playerTotal, int dealerTotal, int funds)
         //break;
     }
     return funds;
+}
+
+int dScore(int dealerTotal, int playerTotal, int bet, int funds)
+{
+    if (dealerTotal > 21)
+    {
+        printf("Dealer busted. Congratulations");
+        playerTotal = bet * 2 + funds;
+    }
+    else if (dealerTotal < 17)
+    {
+        
+    }
 }
