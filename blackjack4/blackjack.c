@@ -26,7 +26,6 @@ int main() {
     player();
     dealer(playerTotal);
     //compareScore(playerTotal, dealerTotal); //Put this at the end of dealer function?
-
     return 0;
 }
 
@@ -52,8 +51,6 @@ void player() {
 //    playerDraw2 = 12;
     //MOVE HALF OF THE CODE INTO A SEPARATE FUNCTION, MAYBE EVEN HAVE EACH RANDOM DRAW IN A SEPARATE FUNCTION
     //Put the calculations of cards in a separate function so it re-uses code in choice function?
-
-
    if (playerDraw1 == 1 && playerDraw2 == 1) {
         printf("A A\n");
         playerDraw1 = 1;
@@ -182,8 +179,6 @@ void player() {
             printf("Player total: %d\n", playerTotal);
         }
     }
-    //A 1 shows up as A 1 instead of an A A
-    //Unreachable code for next section because the condition has already been met for first Ace
     else if (playerDraw1 == 1) {
         if (playerDraw1 + playerDraw2 <= 11) {
             playerDraw1 = 11;
@@ -225,7 +220,6 @@ void dealer(int playerTotal) {
     printf("\nDealer cards are:\n");
     dealerDraw1 = rand() % 13 + 1;
     dealerDraw2 = rand() % 13 + 1;
-    //dealerTotal = dealerDraw1 + dealerDraw2;
 
     if (dealerDraw1 == 1 && dealerDraw1 + dealerDraw2 <=10) {
         dealerDraw1 = 11;
@@ -249,13 +243,6 @@ void dealer(int playerTotal) {
         dealerTotal = dealerDraw2 - 1 + dealerDraw1;
         printf("Dealer total: %d\n", dealerTotal);
     }
-        //*** Below cards for 2 of the same, does not work ***
-//    else if (dealerDraw1 == 11 && dealerDraw2 == 11) {
-//        printf("J J\n");
-//        dealerTotal = 20;
-//        printf("Dealer total: %d\n", dealerTotal);
-//        //maybe add split function here?
-//    }
     else if (dealerDraw1 == 12) {
         dealerTotal = dealerDraw1 - 2 + dealerDraw2;
         printf("Q %d\n", dealerDraw1);
