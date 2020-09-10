@@ -45,81 +45,49 @@ void player() {
     int playerDraw1, playerDraw2, playerTotal;
 
     printf("Here are your cards, good luck\n");
-//    playerDraw1 = rand() % 13 + 1;
-//    playerDraw2 = rand() % 13 + 1;
-    playerDraw1 = 1;
-    playerDraw2 = 1;
-
-    //*** THE CODE ISN'T BEING REACHED BECAUSE IT ALREADY SATISFIES THE CONDITION OF PLAYERDRAW2 == 11
-    //*** MOVE HALF OF THE CODE INTO A SEPARATE FUNCTION, MAYBE EVEN HAVE EACH RANDOM DRAW IN A SEPARATE FUNCTION
-
-    //Put the calculations of cards in a separate function so it re-uses code in choice function?
-//    if (playerDraw1 == 1 && playerDraw1 + playerDraw2 <=10) {
-//        playerDraw1 = 11;
-//        playerTotal = playerDraw1 + playerDraw2;
-//        printf("A %d\n", playerDraw2);
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else if (playerDraw2 == 1 && playerDraw2 + playerDraw1 <=10) {
-//        playerDraw2 = 11;
-//        playerTotal = playerDraw1 + playerDraw2;
-//        printf("%d A\n", playerDraw1);
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else if (playerDraw1 == 11) {
-//        playerDraw1 = 10;
-//        printf("J %d\n", playerDraw1);
-//        playerTotal = playerDraw1 + playerDraw2;
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else if (playerDraw2 == 11) {
-//        playerDraw2 = 10;
-//        printf("%d J\n", playerDraw1);
-//        playerTotal = playerDraw2 + playerDraw1;
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    //*** Below cards for 2 of the same, does not work ***
-////    else if (playerDraw1 == 11 && playerDraw2 == 11) {
-////        printf("J J\n");
-////        playerTotal = 20;
-////        printf("Player total: %d\n", playerTotal);
-////        //maybe add split function here?
-////    }
-//    else if (playerDraw1 == 12) {
-//        playerDraw1 = 10;
-//        playerTotal = playerDraw1 + playerDraw2;
-//        printf("Q %d\n", playerDraw1);
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else if (playerDraw2 == 12) {
-//        playerDraw2 = 10;
-//        playerTotal = playerDraw2 + playerDraw1;
-//        printf("%d Q\n", playerDraw1);
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else if (playerDraw1 == 13) {
-//        playerDraw1 = 10;
-//        playerTotal = playerDraw1 + playerDraw2;
-//        printf("K %d\n", playerDraw1);
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else if (playerDraw2 == 13) {
-//        playerDraw2 = 10;
-//        playerTotal = playerDraw2 + playerDraw1;
-//        printf("%d K\n", playerDraw1);
-//        printf("Player total: %d\n", playerTotal);
-//    }
-//    else {
-//        printf("%d %d\n", playerDraw1, playerDraw2);
-//        playerTotal = playerDraw1 + playerDraw2;
-//        printf("Player total: %d\n", playerTotal);
-//    }
-    //*** -OLD- This section uses the else statement to change any 1st card to display a 10 instead of what it should be.
-    //*** -OLD- I've changed it now but it still adds the 2 cards to 21 instead of 20
-    //*** Now it adds both Jacks up to 22, which is fine but still displays the 2nd Jack as 11 instead of J
     //Don't forget to change the draw cards back to random numbers
+    playerDraw1 = rand() % 13 + 1;
+    playerDraw2 = rand() % 13 + 1;
+//    playerDraw1 = 12;
+//    playerDraw2 = 12;
+    //MOVE HALF OF THE CODE INTO A SEPARATE FUNCTION, MAYBE EVEN HAVE EACH RANDOM DRAW IN A SEPARATE FUNCTION
+    //Put the calculations of cards in a separate function so it re-uses code in choice function?
 
-    if (playerDraw1 == 11) {
+
+   if (playerDraw1 == 1 && playerDraw2 == 1) {
+        printf("A A\n");
+        playerDraw1 = 1;
+        playerDraw2 = 1;
+        playerTotal = playerDraw1 + playerDraw2;
+        printf("Player total: %d\n", playerTotal);
+        //Ask whether player wants to count 1 Ace as 11 for a total of 12? (probably not though)
+        //Goto split function, it may have to be in a separate function
+   }
+   else if (playerDraw1 == 11 && playerDraw2 == 11) {
+        printf("J J\n");
+        playerDraw1 = 10;
+        playerDraw2 = 10;
+        playerTotal = playerDraw1 + playerDraw2;
+        printf("Player total: %d\n", playerTotal);
+        //Goto split function, it may have to be in a separate function
+    }
+   else if (playerDraw1 == 12 && playerDraw2 == 12) {
+       printf("Q Q\n");
+       playerDraw1 = 10;
+       playerDraw2 = 10;
+       playerTotal = playerDraw1 + playerDraw2;
+       printf("Player total: %d\n", playerTotal);
+       //Goto split function, it may have to be in a separate function
+   }
+   else if (playerDraw1 == 13 && playerDraw2 == 13) {
+       printf("K K\n");
+       playerDraw1 = 10;
+       playerDraw2 = 10;
+       playerTotal = playerDraw1 + playerDraw2;
+       printf("Player total: %d\n", playerTotal);
+       //Goto split function, it may have to be in a separate function
+   }
+    else if (playerDraw1 == 11) {
         if (playerDraw2 == 1) {
             playerDraw2 = 11;
             playerDraw1 = 10;
@@ -127,14 +95,6 @@ void player() {
             printf("J A\n");
             printf("Player total: %d\n", playerTotal);
             //go to BLACKJACK winning function, which may be the playerScore function
-        }
-        else if (playerDraw1 == 11 && playerDraw2 == 11) {
-            playerDraw1 = 10;
-            playerDraw2 = 10;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("J J\n");
-            printf("Player total: %d\n", playerTotal);
-            //Goto split function, it may have to be in a separate function
         }
         else {
             playerDraw1 = 10;
@@ -152,14 +112,6 @@ void player() {
             printf("Player total: %d\n", playerTotal);
             //go to BLACKJACK winning function
         }
-        else if (playerDraw2 == 11 && playerDraw1 == 11) {
-            playerDraw1 = 10;
-            playerDraw2 = 10;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("J J\n");
-            printf("Player total: %d\n", playerTotal);
-            //Goto split function, it may have to be in a separate function
-        }
         else {
             playerDraw2 = 10;
             playerTotal = playerDraw2 + playerDraw1;
@@ -176,14 +128,6 @@ void player() {
             printf("Player total: %d\n", playerTotal);
             //go to BLACKJACK winning function, which may be the playerScore function
         }
-        else if (playerDraw1 == 12 && playerDraw2 ==12) {
-            playerDraw1 = 10;
-            playerDraw2 = 10;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("Q Q\n");
-            printf("Player total: %d\n", playerTotal);
-            //Goto split function, it may have to be in a separate function
-        }
         else {
             playerDraw1 = 10;
             playerTotal = playerDraw2 + playerDraw1;
@@ -198,14 +142,6 @@ void player() {
             playerTotal = playerDraw2 + playerDraw1;
             printf("Q A\n");
             printf("Player total: %d\n", playerTotal);
-        }
-        else if (playerDraw2 == 12 && playerDraw1 == 12) {
-            playerDraw1 = 10;
-            playerDraw2 = 10;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("Q Q\n");
-            printf("Player total: %d\n", playerTotal);
-            //Goto split function, it may have to be in a separate function
         }
         else {
             playerDraw1 = 10;
@@ -223,14 +159,6 @@ void player() {
             printf("Player total: %d\n", playerTotal);
             //go to BLACKJACK winning function, which may be the playerScore function
         }
-        else if (playerDraw1 == 13 && playerDraw2 ==13) {
-            playerDraw1 = 10;
-            playerDraw2 = 10;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("K K\n");
-            printf("Player total: %d\n", playerTotal);
-            //Goto split function, it may have to be in a separate function
-        }
         else {
             playerDraw1 = 10;
             playerTotal = playerDraw2 + playerDraw1;
@@ -247,14 +175,6 @@ void player() {
             printf("Player total: %d\n", playerTotal);
             //go to BLACKJACK winning function
         }
-        else if (playerDraw2 == 13 && playerDraw1 == 13) {
-            playerDraw1 = 10;
-            playerDraw2 = 10;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("K K\n");
-            printf("Player total: %d\n", playerTotal);
-            //Goto split function, it may have to be in a separate function
-        }
         else {
             playerDraw2 = 10;
             playerTotal = playerDraw2 + playerDraw1;
@@ -262,22 +182,14 @@ void player() {
             printf("Player total: %d\n", playerTotal);
         }
     }
-    //A 1 shows up as a 1 instead of an A
+    //A 1 shows up as A 1 instead of an A A
+    //Unreachable code for next section because the condition has already been met for first Ace
     else if (playerDraw1 == 1) {
         if (playerDraw1 + playerDraw2 <= 11) {
             playerDraw1 = 11;
             playerTotal = playerDraw1 + playerDraw2;
             printf("A %d\n", playerDraw2);
             printf("Player total: %d\n", playerTotal);
-        }
-        else if (playerDraw2 == 1 && playerDraw1 == 1) {
-            playerDraw1 = 1;
-            playerDraw2 = 1;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("A A\n");
-            printf("Player total: %d\n", playerTotal);
-            //Ask whether player wants to count 1 Ace as 11 for a total of 12? (probably not though)
-            //Goto split function, it may have to be in a separate function
         }
         else {
             playerDraw1 = 1;
@@ -292,15 +204,6 @@ void player() {
             playerTotal = playerDraw1 + playerDraw2;
             printf("%d A\n", playerDraw1);
             printf("Player total: %d\n", playerTotal);
-        }
-        else if (playerDraw2 == 1 && playerDraw1 == 1) {
-            playerDraw1 = 1;
-            playerDraw2 = 1;
-            playerTotal = playerDraw1 + playerDraw2;
-            printf("A A\n");
-            printf("Player total: %d\n", playerTotal);
-            //Ask whether player wants to count 1 Ace as 11 for a total of 12? (probably not though)
-            //Goto split function, it may have to be in a separate function
         }
         else {
             playerDraw2 = 1;
