@@ -31,13 +31,6 @@ int main() {
 }
 
 double betting(double funds, double bet) {
-//    printf("How much would you like to bet?\n$");
-//    scanf("%lf", &bet);
-//    if (bet > funds) {
-//        printf("Insufficient funds. Please enter another amount:\n$");
-//        scanf("%lf", &bet);
-//    }
-//    return bet;
     printf("How much would you like to bet?\n$");
     scanf("%lf", &bet);
     if (bet > funds) {
@@ -483,10 +476,14 @@ int playerScore(int playerTotal, int dealerTotal) {
         printf("Push. No one wins");
         //money goes back to the player
     }
-    else if ((playerTotal == 21 && dealerTotal < 21) || (playerTotal == 21 && dealerTotal > 21)) {
-        printf("Congratulations, you win.\n");
-        //compare to dealer total and see who wins
+    else if (playerTotal == 21 && dealerTotal < 21) {
+        //compare to dealer total and see who wins, may need a separate function for a 3rd dealer card
+        //If dealer has less that 17 then they will draw another card
         //dealer only gets one more card after player gets blackjack
+    }
+    else if (playerTotal == 21 && dealerTotal > 21) {
+        printf("Congratulations, you win.\n");
+        //calculate playerTotal and then ask if they want to play again
     }
     else {
         choice(playerTotal);
@@ -494,11 +491,11 @@ int playerScore(int playerTotal, int dealerTotal) {
     return playerTotal;
 }
 
-int choice(int playerTotal) {
+int choice(int playerTotal) { //add dealerTotal into function header, and look at last line of each code block
     int playerDraw3;
     char answer = ' ';
 
-    printf("\nWould you like to (H)it, (S)tand, (D)ouble Down, S(t)ay?\n");
+    printf("\nWould you like to (H)it, (S)tand, S(p)lit, (D)ouble Down, or S(t)ay?\n");
     scanf(" %c", &answer);
 
     switch(answer) {
@@ -509,24 +506,51 @@ int choice(int playerTotal) {
                 playerDraw3 = 11;
                 playerTotal += playerDraw3;
                 printf("Player total: %d\n", playerTotal);
+                //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
             else if (playerDraw3 == 1 && playerTotal >= 11) {
                 printf("A\n");
                 playerDraw3 = 1;
                 playerTotal += playerDraw3;
-                printf("\n%d\n", playerDraw3);
+                printf("\n%d\n", playerTotal);
+                //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
             else if (playerDraw3 == 11) { // finish adding J, Q, K
-
+                printf("J\n");
+                playerDraw3 = 10;
+                playerTotal += playerDraw3;
+                printf("\n%d", playerTotal);
+                //playerScore(); ???
+                //Print playerTotal but also print previous cards if possible
+            }
+            else if (playerDraw3 == 12) {
+                printf("Q\n");
+                playerDraw3 = 10;
+                playerTotal += playerDraw3;
+                printf("\n%d", playerTotal);
+                //playerScore(); ???
+                //Print playerTotal but also print previous cards if possible
+            }
+            else if (playerDraw3 == 13) {
+                printf("K\n");
+                playerDraw3 = 10;
+                playerTotal += playerDraw3;
+                printf("\n%d", playerTotal);
+                //playerScore(); ???
+                //Print playerTotal but also print previous cards if possible
             }
             else {
                 printf("\n%d\n", playerDraw3);
                 playerTotal += playerDraw3;
                 printf("Player total: %d\n", playerTotal);
+                //playerScore(); ???
+                //Print playerTotal but also print previous cards if possible
             }
-//        case 'S': case 's':
+        case 'S': case 's': //This means Stand! Not Split!
+            //add dealerScore comparison so you know who wins
+            playAgainOrQuit(funds, bet, playerTotal, dealerTotal) // check which rules are neccessary
             //Don't forget that splitting doubles the bet
             //dealer();//determine what to do here, this is wrong
         default: ;
