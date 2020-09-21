@@ -7,43 +7,51 @@ int player(); //return only playerTotal
 int dealer(); //return only dealerTotal
 int choice(int);
 int playerScore(int, int); //feed only playerTotal and then transfer to compareScore
-int dealerScore(int, int, double, double); //feed only dealerTotal and then transfer to compareScore
+double dealerScore(double, double, double, double); //feed only dealerTotal and then transfer to compareScore
 int compareScore(int, int); //feed playerTotal and dealerTotal in and then feed score back to main
-int playAgainOrQuit();
+double playAgainOrQuit(double, double, double, double);
 
 int main() {
     double funds, bet = 0.0;
-    int playerTotal = 0;
-    int dealerTotal = 0; //add variables later for wins, losses, record, winStreak
+    int playerTotal = 21;
+    int dealerTotal = 21; //add variables later for wins, losses, record, winStreak
     time_t t;
     srand((unsigned)time(&t));
     system("clear");
     printf("Welcome to the Blackjack table.\n");
     printf("How much would you like to deposit?\n$");
     scanf("%lf", &funds);
-
-    betting(bet, funds);
-    funds = funds - bet;
-    player();
-    dealer();
+    funds = betting(funds, bet); // make pointers
+    playerTotal = player(); // This is calculating the playerTotal
+    dealerTotal = dealer(); // This is calculating the dealerTotal
+    printf("\nYou have $%.2lf in funds\n", funds);
+//    choice(playerTotal);
     playerScore(playerTotal, dealerTotal);
-    playAgainOrQuit();
-    //Put calculation of playerTotal and dealerTotal here?
-    //compareScore(playerTotal, dealerTotal); Put this at the end of dealer function?
-    //calculate whether win or loss, then print the result
-    printf("You have %.2lf available\n", funds); //possibly put this in another function.
-
     return 0;
 }
 
-double betting(double bet, double funds) {
+double betting(double funds, double bet) {
+//    printf("How much would you like to bet?\n$");
+//    scanf("%lf", &bet);
+//    if (bet > funds) {
+//        printf("Insufficient funds. Please enter another amount:\n$");
+//        scanf("%lf", &bet);
+//    }
+//    return bet;
     printf("How much would you like to bet?\n$");
     scanf("%lf", &bet);
     if (bet > funds) {
         printf("Insufficient funds. Please enter another amount:\n$");
         scanf("%lf", &bet);
     }
-    return bet;
+    funds = funds - bet;
+
+    return funds; //??? I'm returning it to main but where does it go?
+//    playAgainOrQuit();
+//Put calculation of playerTotal and dealerTotal here?
+//compareScore(playerTotal, dealerTotal); Put this at the end of dealer function?
+//calculate whether win or loss, then print the result
+
 }
 
 int player() {
@@ -58,7 +66,7 @@ int player() {
     playerDraw1 = rand() % 13 + 1;
     playerDraw2 = rand() % 13 + 1;
 //    playerDraw1 = 13;
-//    playerDraw2 = 11;
+//    playerDraw2 = 1;
     //MOVE HALF OF THE CODE INTO A SEPARATE FUNCTION, MAYBE EVEN HAVE EACH RANDOM DRAW IN A SEPARATE FUNCTION
     //Put the calculations of cards in a separate function so it re-uses code in choice function?
    if (playerDraw1 == 1 && playerDraw2 == 1) {
@@ -260,14 +268,14 @@ int dealer() {
     dealerDraw1 = rand() % 13 + 1;
     dealerDraw2 = rand() % 13 + 1;
 //    dealerDraw1 = 12;
-//    dealerDraw2 = 11;
+//    dealerDraw2 = 1;
 
     if (dealerDraw1 == 1 && dealerDraw2 == 1) {
         printf("A A\n");
         dealerDraw1 = 1;
         dealerDraw2 = 1;
         dealerTotal = dealerDraw1 + dealerDraw2;
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
         //Ask whether player wants to count 1 Ace as 11 for a total of 12? (probably not though)
         //Goto split function, it may have to be in a separate function
     }
@@ -276,7 +284,7 @@ int dealer() {
         dealerDraw1 = 10;
         dealerDraw2 = 10;
         dealerTotal = dealerDraw1 + dealerDraw2;
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
         //Goto split function, it may have to be in a separate function
     }
     else if (dealerDraw1 == 12 && dealerDraw2 == 12) {
@@ -284,7 +292,7 @@ int dealer() {
         dealerDraw1 = 10;
         dealerDraw2 = 10;
         dealerTotal = dealerDraw1 + dealerDraw2;
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
         //Goto split function, it may have to be in a separate function
     }
     else if (dealerDraw1 == 13 && dealerDraw2 == 13) {
@@ -292,7 +300,7 @@ int dealer() {
         dealerDraw1 = 10;
         dealerDraw2 = 10;
         dealerTotal = dealerDraw1 + dealerDraw2;
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
         //Goto split function, it may have to be in a separate function
     }
     else if (dealerDraw1 == 11) {
@@ -301,7 +309,7 @@ int dealer() {
             dealerDraw1 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("J A\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
             //go to BLACKJACK winning function, which may be the playerScore function
         }
         else if (dealerDraw2 == 12) {
@@ -309,20 +317,20 @@ int dealer() {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("J Q\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else if (dealerDraw2 == 13) {
             dealerDraw1 = 10;
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("J K\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else {
             dealerDraw1 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("J %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw2 == 11) {
@@ -331,7 +339,7 @@ int dealer() {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("A J\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
             //go to BLACKJACK winning function
         }
         else if (dealerDraw1 == 12) {
@@ -339,20 +347,20 @@ int dealer() {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("Q J\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else if (dealerDraw1 == 13) {
             dealerDraw1 = 10;
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("K J\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("%d J\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw1 == 12) {
@@ -361,7 +369,7 @@ int dealer() {
             dealerDraw1 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("Q A\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
             //go to BLACKJACK winning function, which may be the playerScore function
         }
         else if (dealerDraw2 == 13) {
@@ -369,13 +377,13 @@ int dealer() {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("Q K\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else {
             dealerDraw1 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("J %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw2 == 12) {
@@ -384,20 +392,20 @@ int dealer() {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("Q A\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else if (dealerDraw1 == 13) {
             dealerDraw1 = 10;
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("K Q\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("%d Q\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw1 == 13) {
@@ -406,14 +414,14 @@ int dealer() {
             dealerDraw1 = 10;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("K A\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
             //go to BLACKJACK winning function, which may be the playerScore function
         }
         else {
             dealerDraw1 = 10;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("K %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw2 == 13) {
@@ -422,14 +430,14 @@ int dealer() {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("A K\n");
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
             //go to BLACKJACK winning function
         }
         else {
             dealerDraw2 = 10;
             dealerTotal = dealerDraw2 + dealerDraw1;
             printf("%d K\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw1 == 1) {
@@ -437,13 +445,13 @@ int dealer() {
             dealerDraw1 = 11;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("A %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else {
             dealerDraw1 = 1;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("A %d\n", dealerDraw2);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else if (dealerDraw2 == 1) {
@@ -451,19 +459,19 @@ int dealer() {
             dealerDraw2 = 11;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("%d A\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
         else {
             dealerDraw2 = 1;
             dealerTotal = dealerDraw1 + dealerDraw2;
             printf("%d A\n", dealerDraw1);
-            printf("Player total: %d\n", dealerTotal);
+            printf("Dealer total: %d\n", dealerTotal);
         }
     }
     else {
         printf("%d %d\n", dealerDraw1, dealerDraw2);
         dealerTotal = dealerDraw1 + dealerDraw2;
-        printf("Player total: %d\n", dealerTotal);
+        printf("Dealer total: %d\n", dealerTotal);
     }
     return dealerTotal;
 
@@ -471,16 +479,62 @@ int dealer() {
 }
 
 int playerScore(int playerTotal, int dealerTotal) {
-    if (playerTotal < 21) {
-        choice(playerTotal);
+    if (playerTotal == 21 && dealerTotal == 21) {
+        printf("Push. No one wins");
+        //money goes back to the player
     }
-    else if (playerTotal == 21 && dealerTotal != 21) {
+    else if ((playerTotal == 21 && dealerTotal < 21) || (playerTotal == 21 && dealerTotal > 21)) {
         printf("Congratulations, you win.\n");
         //compare to dealer total and see who wins
+        //dealer only gets one more card after player gets blackjack
     }
+    else {
+        choice(playerTotal);
+    }
+    return playerTotal;
 }
 
-int dealerScore(int playerTotal, int dealerTotal, double bet, double funds) {
+int choice(int playerTotal) {
+    int playerDraw3;
+    char answer = ' ';
+
+    printf("\nWould you like to (H)it, (S)tand, (D)ouble Down, S(t)ay?\n");
+    scanf(" %c", &answer);
+
+    switch(answer) {
+        case 'H': case 'h':
+            playerDraw3 = rand() % 13 + 1;
+            if (playerDraw3 == 1 && playerTotal <= 10) {
+                printf("A\n");
+                playerDraw3 = 11;
+                playerTotal += playerDraw3;
+                printf("Player total: %d\n", playerTotal);
+                //Print playerTotal but also print previous cards if possible
+            }
+            else if (playerDraw3 == 1 && playerTotal >= 11) {
+                printf("A\n");
+                playerDraw3 = 1;
+                playerTotal += playerDraw3;
+                printf("\n%d\n", playerDraw3);
+                //Print playerTotal but also print previous cards if possible
+            }
+            else if (playerDraw3 == 11) { // finish adding J, Q, K
+
+            }
+            else {
+                printf("\n%d\n", playerDraw3);
+                playerTotal += playerDraw3;
+                printf("Player total: %d\n", playerTotal);
+            }
+//        case 'S': case 's':
+            //Don't forget that splitting doubles the bet
+            //dealer();//determine what to do here, this is wrong
+        default: ;
+    }
+    return playerTotal;
+}
+
+double dealerScore(double playerTotal, double dealerTotal, double bet, double funds) {
     int dealerDraw3;
     if (dealerTotal < 17) {
         dealerDraw3 = rand() % 13 + 1;
@@ -489,12 +543,12 @@ int dealerScore(int playerTotal, int dealerTotal, double bet, double funds) {
     else if (dealerTotal > 21 && playerTotal == 21) {
         printf("\nDealer busted and you got Blackjack!\n");
         funds = funds + (bet * 1.5); // Put this line in another function
-        playAgainOrQuit();
+//        playAgainOrQuit();
     }
     else if (dealerTotal > 21) {
         printf("\nDealer busted. Congratulations.\n");
         funds = funds + bet;
-        playAgainOrQuit();
+//        playAgainOrQuit();
     }
     return playerTotal;
 //    return dealerTotal; //can only return one thing
@@ -506,48 +560,39 @@ int compareScore(int playerScore, int dealerScore) {
 
 }
 
-int choice(int playerTotal) {
-    int playerDraw3;
-    char answer = ' ';
-
-    printf("\nWould you like to (H)it, (S)tand, (D)ouble Down, S(t)ay?\n");
-    scanf("%c", &answer);
-
-    switch(answer) {
-        case 'H':
-        case 'h':
-            playerDraw3 = rand() % 13 + 1;
-            if (playerDraw3 == 1 && playerTotal <= 10) {
-                printf("A\n");
-                playerDraw3 = 11;
-                playerTotal += playerDraw3;
-            }
-            else {
-                printf("A\n");
-                playerDraw3 = 1;
-                playerTotal += playerDraw3;
-            }
-//        case 'S':
-//        case 's':
-            //dealer();//determine what to do here, this is wrong
-    }
-    return playerTotal;
-}
-
-int playAgainOrQuit(double bet, double funds) {
+double playAgainOrQuit(double funds, double bet, double playerTotal, double dealerTotal) {
+//    char decision = ' ';
+//    //Ask player after each hand whether they want to play again or quit
+//    printf("You have $%.2lf\n", funds);
+//    printf("Would you like to play again? (Y/N)\n");
+//    scanf("%c", &decision);
+//
+//    switch(decision) {
+//        case 'Y':
+//        case 'y':
+//            if (funds > 0) {
+//                betting(bet, funds);
+//            }
+//            else {
+//                printf("You have no money left, please wait for Security to escort you from the casino");
+//            }
+//        case 'N':
+//        case 'n':
+//            printf("Thank you for playing, your winnings are: $%.2lf\n", funds);
+//    }
+//}
+//printf("You have $%.2lf available\n", funds); //possibly put this in another function.
     char decision = ' ';
-    //Ask player after each hand whether they want to play again or quit
-    printf("You have $%.2lf\n", funds);
+//Ask player after each hand whether they want to play again or quit
     printf("Would you like to play again? (Y/N)\n");
     scanf("%c", &decision);
 
-    switch(decision) {
+    switch (decision) {
         case 'Y':
         case 'y':
             if (funds > 0) {
-                betting(bet, funds);
-            }
-            else {
+                betting(funds, bet);
+            } else {
                 printf("You have no money left, please wait for Security to escort you from the casino");
             }
         case 'N':
