@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="blackjack" type="CMakeRunConfiguration" factoryName="Application" singleton="false" REDIRECT_INPUT="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="blackjack" RUN_TARGET_NAME="blackjack" EXPLICIT_BUILD_TARGET_NAME="all">
+    <envs>
+      <env name="TERM" value="xterm" />
+    </envs>
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
