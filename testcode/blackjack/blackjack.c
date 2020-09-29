@@ -6,11 +6,12 @@
 double betting(double, double); //return bet and funds
 int player(); //return only playerTotal
 int dealer(); //return only dealerTotal
-int choice(int);
+int choice(int, int, int);
 int playerScore(int, int, int); //feed only playerTotal and then transfer to compareScore
 double dealerScore(double, double, double, double); //feed only dealerTotal and then transfer to compareScore
-int compareScore(int, int); //feed playerTotal and dealerTotal in and then feed score back to main
-double playAgainOrQuit(double, double);
+void compareScore(int, int, double, double); //feed playerTotal and dealerTotal in and then feed score back to main
+void playAgainOrQuit(double, double);
+double winLose(double, double, int);
 
 int main() {
     double funds, bet = 0.0;
@@ -29,8 +30,10 @@ int main() {
     printf("\nYou have $%.2lf in funds\n", funds);
 //    choice(playerTotal);
     playerScore(playerTotal, playerTotal2, dealerTotal);
-    playerTotal += playerTotal2;
-    printf("Player total: %d\n", playerTotal);
+    playerTotal2 += playerTotal; //adding 100 to the total works but this one doesn't
+    printf("Player total: %d\n", playerTotal2);
+    compareScore(playerTotal, dealerTotal, funds, bet);
+    printf("Player total: $%.2lf\n", funds); // Funds not totalling
     playAgainOrQuit(funds, bet);
 //    playerTotal;
     return 0;
@@ -492,13 +495,13 @@ int playerScore(int playerTotal, int playerTotal2, int dealerTotal) {
         //calculate playerTotal and then ask if they want to play again
     }
     else {
-        choice(playerTotal);
+        choice(playerTotal, playerTotal2, dealerTotal);
     }
     return playerTotal;
 }
 
-int choice(int playerTotal) { //add dealerTotal into function header, and look at last line of each code block
-    int playerDraw3;
+int choice(int playerTotal, int playerTotal2, int dealerTotal) { //add dealerTotal into function header, and look at last line of each code block
+    int playerHit;
     char answer = ' ';
 
     printf("\nWould you like to (H)it, (S)tand, S(p)lit, (D)ouble Down, or S(t)ay?\n");
@@ -506,45 +509,51 @@ int choice(int playerTotal) { //add dealerTotal into function header, and look a
 
     switch(answer) {
         case 'H': case 'h':
-            playerDraw3 = rand() % 13 + 1;
-            if (playerDraw3 == 1 && playerTotal <= 10) {
+            playerHit = rand() % 13 + 1;
+            if (playerHit == 1 && playerTotal <= 10) {
                 printf("A\n");
-                playerDraw3 = 11;
-                playerTotal += playerDraw3;
+                playerHit = 11;
+                playerTotal2 = playerTotal + playerHit;
+                return playerTotal2;
                 //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
-            else if (playerDraw3 == 1 && playerTotal >= 11) {
+            else if (playerHit == 1 && playerTotal >= 11) {
                 printf("A\n");
-                playerDraw3 = 1;
-                playerTotal += playerDraw3;
+                playerHit = 1;
+                playerTotal2 = playerTotal + playerHit;
+                return playerTotal2;
                 //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
-            else if (playerDraw3 == 11) { // finish adding J, Q, K
+            else if (playerHit == 11) { // finish adding J, Q, K
                 printf("J\n");
-                playerDraw3 = 10;
-                playerTotal += playerDraw3;
+                playerHit = 10;
+                playerTotal2 = playerTotal + playerHit;
+                return playerTotal2;
                 //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
-            else if (playerDraw3 == 12) {
+            else if (playerHit == 12) {
                 printf("Q\n");
-                playerDraw3 = 10;
-                playerTotal += playerDraw3;
+                playerHit = 10;
+                playerTotal2 = playerTotal + playerHit;
+                return playerTotal2;
                 //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
-            else if (playerDraw3 == 13) {
+            else if (playerHit == 13) {
                 printf("K\n");
-                playerDraw3 = 10;
-                playerTotal += playerDraw3;
+                playerHit = 10;
+                playerTotal2 = playerTotal + playerHit;
+                return playerTotal2;
                 //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
             else {
-                printf("\n%d\n", playerDraw3);
-                playerTotal += playerDraw3;
+                printf("\n%d\n", playerHit);
+                playerTotal2 = playerTotal + playerHit;
+                return playerTotal2;
                 //playerScore(); ???
                 //Print playerTotal but also print previous cards if possible
             }
@@ -555,7 +564,7 @@ int choice(int playerTotal) { //add dealerTotal into function header, and look a
             //dealer();//determine what to do here, this is wrong
         default: ;
     }
-    return playerTotal;
+    return playerTotal2;
 }
 
 double dealerScore(double playerTotal, double dealerTotal, double bet, double funds) {
@@ -580,25 +589,63 @@ double dealerScore(double playerTotal, double dealerTotal, double bet, double fu
 //    return funds;
 }
 
-int compareScore(int playerScore, int dealerScore) {
+void compareScore(int playerScore, int dealerScore, double funds, double bet) {
+    int tempScore = 0;
+    if (playerScore == dealerScore) {
+        printf("Push. Your bet has been refunded\n");
+        tempScore = 1;
+        winLose(funds, bet, tempScore);
+    }
+    else if (playerScore > dealerScore) {
+        printf("Congratulations!\n");
+        tempScore = 2;
+        winLose(funds, bet, tempScore);
+    }
+    else {
+        printf("Sorry, you lose.\n");
+        tempScore = 0;
+        winLose(funds, bet, tempScore);
+    }
 
 }
 
-double playAgainOrQuit(double funds, double bet) {
+double winLose (double funds, double bet, int tempScore) {
+    switch (tempScore) {
+        case '0':
+            funds = funds - bet;
+        case '1':
+            funds = funds + bet;
+        case '2':
+            funds = funds + (bet * 2);
+        default: ;
+    }
+//    while (tempScore == 0) {
+//        funds = funds - bet;
+//    }
+//    while (tempScore == 1) {
+//        funds = funds + bet;
+//    }
+//    while (tempScore == 2) {
+//        funds = funds + (bet * 2);
+//    }
+    return funds;
+}
+
+void playAgainOrQuit(double funds, double bet) {
     char decision = ' ';
     printf("Would you like to play again? (Y/N)\n");
     scanf("%c", &decision);
 
     switch (decision) {
-        case 'Y':
-        case 'y':
+        case 'Y': case 'y':
             if (funds > 0) {
                 betting(funds, bet);
             } else {
                 printf("You have no money left, please wait for Security to escort you from the casino");
             }
-        case 'N':
-        case 'n':
-            printf("Thank you for playing, your winnings are: $%.2lf\n", funds);
+        case 'N': case 'n':
+            printf("Thank you for playing, your balance is: $%.2lf\n", funds);
+
+        default: ;
     }
 }
